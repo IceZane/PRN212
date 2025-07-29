@@ -23,5 +23,37 @@ namespace DrugPreventionSystem
         {
             InitializeComponent();
         }
+
+        // Giả lập dữ liệu người dùng đăng nhập
+        private readonly Dictionary<string, (string password, string role)> users = new()
+        {
+            { "member", ("123", "Member") },
+            { "staff", ("123", "Staff") },
+            { "manager", ("123", "Manager") },
+            { "consultant", ("123", "Consultant") },
+            { "admin", ("123", "Admin") },
+        };
+
+        private void btnLogin_Click(object sender, RoutedEventArgs e)
+        {
+            string username = txtUsername.Text.Trim().ToLower();
+            string password = txtPassword.Password.Trim();
+
+            if (users.ContainsKey(username) && users[username].password == password)
+            {
+                string role = users[username].role;
+
+                // Mở MainWindow và truyền role
+                MainWindow mainWindow = new MainWindow(role, username);
+                mainWindow.Show();
+
+                this.Close(); // Đóng cửa sổ đăng nhập
+            }
+            else
+            {
+                MessageBox.Show("Tên đăng nhập hoặc mật khẩu không đúng!", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
     }
 }
+

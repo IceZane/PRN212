@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using BusinessObjects;
 
 namespace DrugPreventionSystem
 {
@@ -19,9 +20,34 @@ namespace DrugPreventionSystem
     /// </summary>
     public partial class MemberHomePage : Window
     {
-        public MemberHomePage()
+        private User _loginUser;
+
+        public MemberHomePage(User loginUser)  // Nhận đối tượng User từ LoginWindow
         {
             InitializeComponent();
+            _loginUser = loginUser; // Gán giá trị
+            lblWelcome.Text = $"Chào mừng, {_loginUser}";
+        }
+
+        private void btnCourses_Click(object sender, RoutedEventArgs e)
+        {
+            // Truyền user qua MainWindow
+            MainWindow courseWindow = new MainWindow(_loginUser);
+            courseWindow.Show();
+            this.Close();
+        }
+
+        private void btnHistory_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("Chức năng lịch sử chưa được triển khai.");
+            // Hoặc mở một cửa sổ mới nếu đã có.
+        }
+
+        private void btnLogout_Click(object sender, RoutedEventArgs e)
+        {
+            LoginWindow login = new LoginWindow();
+            login.Show();
+            this.Close();
         }
     }
 }

@@ -17,11 +17,12 @@ namespace DrugPreventionSystem
     /// <summary>
     /// Interaction logic for HomePage.xaml
     /// </summary>
-    public partial class HomePage : Window
+    public partial class HomePage : Page
     {
-        public HomePage()
+        public HomePage(string username, string role)
         {
             InitializeComponent();
+            txtGreeting.Text = $"Xin chào, {username} ({role})!";
         }
     }
 }
