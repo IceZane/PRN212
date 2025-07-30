@@ -1,53 +1,45 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+using Microsoft.EntityFrameworkCore; // Bổ sung để dùng Include
+using BusinessObjects;
+using DataAccessObject;
 
 namespace DrugPreventionSystem
 {
-    /// <summary>
-    /// Interaction logic for LoginWindow.xaml
-    /// </summary>
     public partial class LoginWindow : Window
     {
+        private readonly DrugUsePreventionSupportSystemContext _context;
+
         public LoginWindow()
         {
             InitializeComponent();
+            _context = new DrugUsePreventionSupportSystemContext();
         }
-
-        // Giả lập dữ liệu người dùng đăng nhập
-        private readonly Dictionary<string, (string password, string role)> users = new()
-        {
-            { "member", ("123", "Member") },
-            { "staff", ("123", "Staff") },
-            { "manager", ("123", "Manager") },
-            { "consultant", ("123", "Consultant") },
-            { "admin", ("123", "Admin") },
-        };
 
         private void btnLogin_Click(object sender, RoutedEventArgs e)
         {
             string username = txtUsername.Text.Trim().ToLower();
             string password = txtPassword.Password.Trim();
 
-            if (users.ContainsKey(username) && users[username].password == password)
+            // Truy vấn và Include Role
+            var user = _context.Users
+                .Include(u => u.Role)
+                .FirstOrDefault(u => u.Email.ToLower() == username && u.PasswordHash == password);
+
+            if (user != null)
             {
-                string role = users[username].role;
+                if (user.Role != null && user.Role.RoleName.Equals("Member", StringComparison.OrdinalIgnoreCase))
+                {
+                    MemberHomePage memberHomePage = new MemberHomePage(user);
+                    memberHomePage.Show();
+                }
+                else
+                {
+                    MainWindow mainWindow = new MainWindow(user);
+                    mainWindow.Show();
+                }
 
-                // Mở MainWindow và truyền role
-                MainWindow mainWindow = new MainWindow(role, username);
-                mainWindow.Show();
-
-                this.Close(); // Đóng cửa sổ đăng nhập
+                this.Close();
             }
             else
             {
@@ -56,4 +48,3 @@ namespace DrugPreventionSystem
         }
     }
 }
-

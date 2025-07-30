@@ -68,8 +68,8 @@
 
             <!-- Course List -->
             <ListBox x:Name="lstCourses"
-                     Grid.Row="3"
-                     SelectionChanged="lstCourses_SelectionChanged">
+         Grid.Row="3"
+         SelectionChanged="lstCourses_SelectionChanged">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Margin="5">

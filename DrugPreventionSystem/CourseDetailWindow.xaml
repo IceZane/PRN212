@@ -1,0 +1,46 @@
+﻿<Window x:Class="DrugPreventionSystem.CourseDetailWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Chi tiết khóa học" Height="400" Width="600"
+        WindowStartupLocation="CenterScreen">
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock x:Name="txtTitle"
+                   FontSize="22"
+                   FontWeight="Bold"
+                   Foreground="DarkBlue"
+                   TextWrapping="Wrap" />
+
+        <TextBlock x:Name="txtDescription"
+                   Grid.Row="1"
+                   Margin="0,10,0,10"
+                   TextWrapping="Wrap"
+                   FontSize="16"/>
+
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
+
+            <Button Content="❌ Hủy đăng ký"
+                x:Name="btnUnregister"
+                Click="btnUnregister_Click"
+                Background="Tomato"
+                Foreground="White"
+                Margin="0,0,10,0"
+                FontWeight="Bold"
+                Height="35" Width="110"/>
+
+            <Button Content="Đăng ký khóa học"
+                    Click="btnRegister_Click"
+                    Width="150" Height="35"
+                    Margin="0,0,10,0"
+                    Background="DarkGreen" Foreground="White"/>
+            <Button Content="Đóng"
+                    Click="btnClose_Click"
+                    Width="100" Height="35"/>
+        </StackPanel>
+    </Grid>
+</Window>

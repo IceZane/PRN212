@@ -26,14 +26,14 @@ namespace DrugPreventionSystem
         {
             InitializeComponent();
             _loginUser = loginUser; // Gán giá trị
-            lblWelcome.Text = $"Chào mừng, {_loginUser}";
+            lblWelcome.Text = $"Chào mừng, {_loginUser.FullName}!";
         }
 
         private void btnCourses_Click(object sender, RoutedEventArgs e)
         {
             // Truyền user qua MainWindow
-            MainWindow courseWindow = new MainWindow(_loginUser);
-            courseWindow.Show();
+            MainWindow mainWindow = new MainWindow(_loginUser); // truyền user đầy đủ thay vì role
+            mainWindow.Show();
             this.Close();
         }
 
