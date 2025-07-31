@@ -33,6 +33,11 @@ namespace DrugPreventionSystem
                     MemberHomePage memberHomePage = new MemberHomePage(user);
                     memberHomePage.Show();
                 }
+                else
+                {
+                    MainWindow mainWindow = new MainWindow(user);
+                    mainWindow.Show();
+                }
 
                 this.Close();
             }

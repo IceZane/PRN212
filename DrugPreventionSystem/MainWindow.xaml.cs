@@ -18,39 +18,30 @@ namespace DrugPreventionSystem
     {
         private DrugUsePreventionSupportSystemContext _context;
 
-        private string currentRole;
-        private string currentUsername;
         private TrainingCourseDAO _courseDAO;
         private User _currentUser;
-        private bool isInitialized = false;
-
 
         public MainWindow(User user)
         {
-            InitializeComponent();
+            InitializeComponent(); // Luôn phải gọi trước
 
             _context = new DrugUsePreventionSupportSystemContext();
             _courseDAO = new TrainingCourseDAO();
             _currentUser = user;
 
-            currentRole = _currentUser.Role?.RoleName ?? "Member"; 
-            currentUsername = _currentUser.Email ?? "unknown";      
-
             lblWelcome.Content = _currentUser.Role != null
                 ? $"Chào {_currentUser.FullName} ({_currentUser.Role.RoleName})"
                 : $"Chào {_currentUser.FullName}";
 
-            LoadMenuByRole(currentRole);
-
-            isInitialized = true;
+            LoadMenuByRole(_currentUser.Role?.RoleName ?? "Member");
             LoadCourses();
         }
-
 
         private void LoadMenuByRole(string role)
         {
             mainMenu.Items.Clear();
 
+            // Mục chung cho tất cả
             MenuItem homeItem = new MenuItem { Header = "Trang chủ", Name = "menuHome" };
             homeItem.Click += HomeItem_Click;
             mainMenu.Items.Add(homeItem);
@@ -97,10 +88,9 @@ namespace DrugPreventionSystem
 
         private void cboAgeGroup_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (!isInitialized || _courseDAO == null) return;
-            string? selected = (cboAgeGroup.SelectedItem as ComboBoxItem)?.Content?.ToString();
+            string selected = (cboAgeGroup.SelectedItem as ComboBoxItem)?.Content.ToString();
 
-            if (string.IsNullOrEmpty(selected) || selected == "Tất cả")
+            if (selected == "Tất cả")
             {
                 LoadCourses();
             }
@@ -110,7 +100,6 @@ namespace DrugPreventionSystem
                 lstCourses.ItemsSource = filtered;
             }
         }
-
 
         private void btnSearch_Click(object sender, RoutedEventArgs e)
         {
@@ -147,7 +136,8 @@ namespace DrugPreventionSystem
         {
             if (_courseDAO == null)
             {
-                _courseDAO = new TrainingCourseDAO();
+                MessageBox.Show("_courseDAO chưa được khởi tạo!", "Lỗi nghiêm trọng", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
             }
 
             var courses = _courseDAO.GetAllCourses();

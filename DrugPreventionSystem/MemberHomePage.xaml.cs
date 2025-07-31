@@ -39,8 +39,8 @@ namespace DrugPreventionSystem
 
         private void btnHistory_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Chức năng lịch sử chưa được triển khai.");
-            // Hoặc mở một cửa sổ mới nếu đã có.
+            CourseHistoryWindow historyWindow = new CourseHistoryWindow(_loginUser);
+            historyWindow.Show();
         }
 
         private void btnLogout_Click(object sender, RoutedEventArgs e)
