@@ -22,58 +22,28 @@ namespace DrugPreventionSystem
         private string currentUsername;
         private TrainingCourseDAO _courseDAO;
         private User _currentUser;
+        private bool isInitialized = false;
 
-        public MainWindow()
-        {
-            InitializeComponent();
-        }
-
-
-        public MainWindow(string role, string username)
-        {
-            InitializeComponent();
-
-            _context = new DrugUsePreventionSupportSystemContext();
-            _courseDAO = new TrainingCourseDAO(); // Bổ sung nếu chưa có
-            _currentUser = _context.Users.FirstOrDefault(u => u.Email == username);
-
-            if (_currentUser == null)
-            {
-                MessageBox.Show("Không tìm thấy người dùng!", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
-            }
-
-            lblWelcome.Content = _currentUser.Role != null
-                ? $"Chào {_currentUser.FullName} ({_currentUser.Role.RoleName})"
-                : $"Chào {_currentUser.FullName}";
-
-            LoadMenuByRole(_currentUser.Role?.RoleName ?? "Member");
-            this.Loaded += MainWindow_Loaded;
-        }
-
-
-
-
-        
-        private void MainWindow_Loaded(object sender, RoutedEventArgs e)
-        {
-            LoadCourses();
-        }
 
         public MainWindow(User user)
         {
-            InitializeComponent(); // Luôn phải gọi trước
+            InitializeComponent();
 
             _context = new DrugUsePreventionSupportSystemContext();
             _courseDAO = new TrainingCourseDAO();
             _currentUser = user;
 
+            currentRole = _currentUser.Role?.RoleName ?? "Member"; 
+            currentUsername = _currentUser.Email ?? "unknown";      
+
             lblWelcome.Content = _currentUser.Role != null
                 ? $"Chào {_currentUser.FullName} ({_currentUser.Role.RoleName})"
                 : $"Chào {_currentUser.FullName}";
 
-            LoadMenuByRole(_currentUser.Role?.RoleName ?? "Member");
-            this.Loaded += MainWindow_Loaded;
+            LoadMenuByRole(currentRole);
+
+            isInitialized = true;
+            LoadCourses();
         }
 
 
@@ -81,7 +51,6 @@ namespace DrugPreventionSystem
         {
             mainMenu.Items.Clear();
 
-            // Mục chung cho tất cả
             MenuItem homeItem = new MenuItem { Header = "Trang chủ", Name = "menuHome" };
             homeItem.Click += HomeItem_Click;
             mainMenu.Items.Add(homeItem);
@@ -128,9 +97,10 @@ namespace DrugPreventionSystem
 
         private void cboAgeGroup_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            string selected = (cboAgeGroup.SelectedItem as ComboBoxItem)?.Content.ToString();
+            if (!isInitialized || _courseDAO == null) return;
+            string? selected = (cboAgeGroup.SelectedItem as ComboBoxItem)?.Content?.ToString();
 
-            if (selected == "Tất cả")
+            if (string.IsNullOrEmpty(selected) || selected == "Tất cả")
             {
                 LoadCourses();
             }
@@ -140,6 +110,7 @@ namespace DrugPreventionSystem
                 lstCourses.ItemsSource = filtered;
             }
         }
+
 
         private void btnSearch_Click(object sender, RoutedEventArgs e)
         {
@@ -176,8 +147,7 @@ namespace DrugPreventionSystem
         {
             if (_courseDAO == null)
             {
-                MessageBox.Show("_courseDAO chưa được khởi tạo!", "Lỗi nghiêm trọng", MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
+                _courseDAO = new TrainingCourseDAO();
             }
 
             var courses = _courseDAO.GetAllCourses();
