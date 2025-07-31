@@ -26,20 +26,32 @@ namespace DrugPreventionSystem
                 .Include(u => u.Role)
                 .FirstOrDefault(u => u.Email.ToLower() == username && u.PasswordHash == password);
 
-            if (user != null)
+            if (user != null && user.Role != null)
             {
-                if (user.Role != null && user.Role.RoleName.Equals("Member", StringComparison.OrdinalIgnoreCase))
+                if (user.Role.RoleName.Equals("Member", StringComparison.OrdinalIgnoreCase))
                 {
                     MemberHomePage memberHomePage = new MemberHomePage(user);
                     memberHomePage.Show();
                 }
+                else if (user.Role.RoleName.Equals("Manager", StringComparison.OrdinalIgnoreCase))
+                {
+                    ManagerWindow managerWindow = new ManagerWindow(user); // hoặc truyền user nếu cần
+                    managerWindow.Show();
+                }
+                else
+                {
+                    MessageBox.Show("Bạn không có quyền truy cập hệ thống!", "Cảnh báo", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
 
-                this.Close();
+                this.Close(); // Chỉ đóng sau khi mở cửa sổ mới
             }
             else
             {
                 MessageBox.Show("Tên đăng nhập hoặc mật khẩu không đúng!", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+
+
         }
     }
 }

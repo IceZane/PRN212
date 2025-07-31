@@ -1,4 +1,5 @@
-﻿using DrugPreventionSystem.ViewModels;
+﻿using BusinessObjects;
+using DrugPreventionSystem.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,9 +21,12 @@ namespace DrugPreventionSystem
     /// </summary>
     public partial class ManagerWindow : Window
     {
-        public ManagerWindow()
+        private User _currentUser;
+
+        public ManagerWindow(User user)
         {
             InitializeComponent();
+            _currentUser = user;
             this.DataContext = new ManagerViewModel();
         }
     }

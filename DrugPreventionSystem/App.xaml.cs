@@ -9,11 +9,7 @@ namespace DrugPreventionSystem
     /// </summary>
     public partial class App : Application
     {
-        protected override void OnExit(ExitEventArgs e)
-        {
-            MessageBox.Show("Ứng dụng đang thoát!", "DEBUG", MessageBoxButton.OK);
-            base.OnExit(e);
-        }
+        
     }
 
 }
