@@ -1,0 +1,39 @@
+﻿<UserControl  x:Class="DrugPreventionSystem.Views.DashboardView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="clr-namespace:DrugPreventionSystem.ViewModels"
+        mc:Ignorable="d">
+    
+
+    <StackPanel Orientation="Vertical" Margin="20">
+        <TextBlock Text="📊 Thống kê hệ thống" 
+               FontSize="24" FontWeight="Bold" 
+               Foreground="DarkBlue"
+               Margin="0,0,0,10"/>
+
+        <UniformGrid Columns="3" Margin="0,0,0,20">
+            <Border Background="#FFCCE5FF" Padding="15" Margin="5" CornerRadius="8">
+                <StackPanel>
+                    <TextBlock Text="{Binding TotalUsers}" FontSize="30" FontWeight="Bold" Foreground="DarkSlateBlue" />
+                    <TextBlock Text="Tổng người khảo sát" FontSize="14" />
+                </StackPanel>
+            </Border>
+
+            <Border Background="#FFFFD6D6" Padding="15" Margin="5" CornerRadius="8">
+                <StackPanel>
+                    <TextBlock Text="{Binding HighRiskUsers}" FontSize="30" FontWeight="Bold" Foreground="DarkRed" />
+                    <TextBlock Text="Nguy cơ cao" FontSize="14" />
+                </StackPanel>
+            </Border>
+
+            <Border Background="#FFD9FCD9" Padding="15" Margin="5" CornerRadius="8">
+                <StackPanel>
+                    <TextBlock Text="{Binding TotalCourses}" FontSize="30" FontWeight="Bold" Foreground="Green" />
+                    <TextBlock Text="Số khóa học" FontSize="14" />
+                </StackPanel>
+            </Border>
+        </UniformGrid>
+    </StackPanel>
+</UserControl>

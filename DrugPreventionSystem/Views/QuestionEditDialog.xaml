@@ -1,0 +1,34 @@
+﻿<Window x:Class="DrugPreventionSystem.Views.QuestionEditDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Chỉnh sửa câu hỏi" 
+        Height="250" Width="500"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="NoResize">
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Text="Nội dung câu hỏi:" FontWeight="Bold" Margin="0,0,0,10"/>
+
+        <TextBox Grid.Row="1" x:Name="QuestionTextBox" 
+                 TextWrapping="Wrap" 
+                 AcceptsReturn="True" 
+                 VerticalScrollBarVisibility="Auto"
+                 Margin="0,0,0,15"/>
+
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button x:Name="OkButton" Content="OK" 
+                    Width="80" Height="30" Margin="0,0,10,0"
+                    Background="#4CAF50" Foreground="White"
+                    Click="OkButton_Click"/>
+            <Button x:Name="CancelButton" Content="Hủy" 
+                    Width="80" Height="30"
+                    Background="#757575" Foreground="White"
+                    Click="CancelButton_Click"/>
+        </StackPanel>
+    </Grid>
+</Window>

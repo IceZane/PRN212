@@ -1,0 +1,204 @@
+﻿<UserControl x:Class="DrugPreventionSystem.Views.SurveyManagementView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:DrugPreventionSystem.Views"
+             xmlns:vm="clr-namespace:DrugPreventionSystem.ViewModels">
+
+    <UserControl.DataContext>
+        <vm:SurveyManagementViewModel />
+    </UserControl.DataContext>
+
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <TextBlock Grid.Row="0" Text="📝 Quản lý khảo sát" FontSize="20" FontWeight="Bold" Margin="0,0,0,10"/>
+
+        <!-- Survey Management Buttons -->
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,10">
+            <Button x:Name="AddSurveyButton" Content="➕ Thêm khảo sát" 
+                    Background="#4CAF50" Foreground="White" 
+                    Padding="10,5" Margin="0,0,10,0"
+                    Click="AddSurveyButton_Click"/>
+            <Button x:Name="EditSurveyButton" Content="✏️ Sửa khảo sát" 
+                    Background="#2196F3" Foreground="White" 
+                    Padding="10,5" Margin="0,0,10,0"
+                    Click="EditSurveyButton_Click"
+                    IsEnabled="{Binding HasSelectedSurvey}"/>
+            <Button x:Name="DeleteSurveyButton" Content="🗑️ Xóa khảo sát" 
+                    Background="#F44336" Foreground="White" 
+                    Padding="10,5"
+                    Click="DeleteSurveyButton_Click"
+                    IsEnabled="{Binding HasSelectedSurvey}"/>
+        </StackPanel>
+
+        <!-- Surveys DataGrid -->
+        <DataGrid Grid.Row="2" x:Name="SurveysDataGrid"
+          ItemsSource="{Binding Surveys}" 
+          SelectedItem="{Binding SelectedSurvey, Mode=TwoWay}"
+          AutoGenerateColumns="False" 
+          IsReadOnly="True" 
+          Margin="0,0,0,10"
+          SelectionMode="Single"
+          MouseDoubleClick="SurveysDataGrid_MouseDoubleClick">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="ID" Binding="{Binding SurveyId}" Width="50"/>
+                <DataGridTextColumn Header="Tên khảo sát" Binding="{Binding SurveyName}" Width="2*"/>
+                <DataGridTextColumn Header="Mô tả" Binding="{Binding Description}" Width="3*"/>
+                <DataGridTextColumn Header="Số câu hỏi" Binding="{Binding SurveyQuestions.Count}" Width="100"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <!-- Splitter -->
+        <GridSplitter Grid.Row="3" Height="5" HorizontalAlignment="Stretch" 
+                      Background="#CCCCCC" Margin="0,5"/>
+
+        <!-- Questions & Answers Management -->
+        <Grid Grid.Row="4" Margin="0,10,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="5"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Questions Panel -->
+            <GroupBox Grid.Column="0" Header="📋 Câu hỏi">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Question Buttons -->
+                    <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,10">
+                        <Button x:Name="AddQuestionButton" Content="➕ Thêm câu hỏi" 
+                                Background="#4CAF50" Foreground="White" 
+                                Padding="8,4" Margin="0,0,5,0"
+                                Click="AddQuestionButton_Click"
+                                IsEnabled="{Binding HasSelectedSurvey}"/>
+                       
+                        <Button x:Name="DeleteQuestionButton" Content="🗑️ Xóa" 
+                                Background="#F44336" Foreground="White" 
+                                Padding="8,4"
+                                Click="DeleteQuestionButton_Click"
+                                IsEnabled="{Binding HasSelectedQuestion}"/>
+                    </StackPanel>
+
+                    <!-- Questions List -->
+                    <DataGrid Grid.Row="1" x:Name="QuestionsDataGrid"
+                              ItemsSource="{Binding Questions}" 
+                              SelectedItem="{Binding SelectedQuestion}"
+                              AutoGenerateColumns="False" 
+                              IsReadOnly="True">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="ID" Binding="{Binding QuestionId}" Width="40"/>
+                            <DataGridTextColumn Header="Câu hỏi" Binding="{Binding QuestionText}" Width="*"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+
+                    <!-- Question Edit Area -->
+                    <Border Grid.Row="2" BorderBrush="#CCCCCC" BorderThickness="1" 
+                            Margin="0,10,0,0" Padding="10" Background="#F9F9F9">
+                        <StackPanel>
+                            <TextBlock Text="Nội dung câu hỏi:" FontWeight="Bold" Margin="0,0,0,5"/>
+                            <TextBox x:Name="QuestionTextBox" 
+                                     Text="{Binding SelectedQuestion.QuestionText, UpdateSourceTrigger=PropertyChanged}"
+                                     TextWrapping="Wrap" 
+                                     Height="60" 
+                                     VerticalScrollBarVisibility="Auto"/>
+                            <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                                <Button Content="💾 Lưu câu hỏi" 
+                                        Background="#4CAF50" Foreground="White" 
+                                        Padding="8,4" Margin="0,0,10,0"
+                                        Click="SaveQuestionButton_Click"
+                                        IsEnabled="{Binding HasSelectedQuestion}"/>
+                                <Button Content="❌ Hủy" 
+                                        Background="#757575" Foreground="White" 
+                                        Padding="8,4"
+                                        Click="CancelQuestionButton_Click"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+                </Grid>
+            </GroupBox>
+
+            <!-- Splitter -->
+            <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Center" 
+                          Background="#CCCCCC"/>
+
+            <!-- Answers Panel -->
+            <GroupBox Grid.Column="2" Header="🎯 Đáp án">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Answer Buttons -->
+                    <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,10">
+                        <Button x:Name="AddAnswerButton" Content="➕ Thêm đáp án" 
+                                Background="#4CAF50" Foreground="White" 
+                                Padding="8,4" Margin="0,0,5,0"
+                                Click="AddAnswerButton_Click"
+                                IsEnabled="{Binding HasSelectedQuestion}"/>
+                       
+                        <Button x:Name="DeleteAnswerButton" Content="🗑️ Xóa" 
+                                Background="#F44336" Foreground="White" 
+                                Padding="8,4"
+                                Click="DeleteAnswerButton_Click"
+                                IsEnabled="{Binding HasSelectedAnswer}"/>
+                    </StackPanel>
+
+                    <!-- Answers List -->
+                    <DataGrid Grid.Row="1" x:Name="AnswersDataGrid"
+                              ItemsSource="{Binding Answers}" 
+                              SelectedItem="{Binding SelectedAnswer}"
+                              AutoGenerateColumns="False" 
+                              IsReadOnly="True">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="ID" Binding="{Binding AnswerId}" Width="40"/>
+                            <DataGridTextColumn Header="Đáp án" Binding="{Binding AnswerText}" Width="*"/>
+                            <DataGridTextColumn Header="Điểm" Binding="{Binding Score}" Width="60"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+
+                    <!-- Answer Edit Area -->
+                    <Border Grid.Row="2" BorderBrush="#CCCCCC" BorderThickness="1" 
+                            Margin="0,10,0,0" Padding="10" Background="#F9F9F9">
+                        <StackPanel>
+                            <TextBlock Text="Nội dung đáp án:" FontWeight="Bold" Margin="0,0,0,5"/>
+                            <TextBox x:Name="AnswerTextBox" 
+                                     Text="{Binding SelectedAnswer.AnswerText, UpdateSourceTrigger=PropertyChanged}"
+                                     Height="40" Margin="0,0,0,10"/>
+
+                            <TextBlock Text="Điểm số:" FontWeight="Bold" Margin="0,0,0,5"/>
+                            <TextBox x:Name="ScoreTextBox" 
+                                     Text="{Binding SelectedAnswer.Score, UpdateSourceTrigger=PropertyChanged}"
+                                     Width="100" HorizontalAlignment="Left" Margin="0,0,0,10"/>
+
+                            <StackPanel Orientation="Horizontal">
+                                <Button Content="💾 Lưu đáp án" 
+                                        Background="#4CAF50" Foreground="White" 
+                                        Padding="8,4" Margin="0,0,10,0"
+                                        Click="SaveAnswerButton_Click"
+                                        IsEnabled="{Binding HasSelectedAnswer}"/>
+                                <Button Content="❌ Hủy" 
+                                        Background="#757575" Foreground="White" 
+                                        Padding="8,4"
+                                        Click="CancelAnswerButton_Click"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+                </Grid>
+            </GroupBox>
+        </Grid>
+    </Grid>
+</UserControl>

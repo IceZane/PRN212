@@ -1,0 +1,36 @@
+﻿<Window x:Class="DrugPreventionSystem.ManagerWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="clr-namespace:DrugPreventionSystem.ViewModels"
+        mc:Ignorable="d"
+        Title="ManagerWindow" Height="450" Width="800">
+   
+
+    <DockPanel>
+
+        <!-- THÔNG TIN MANAGER GÓC PHẢI -->
+        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" 
+                    HorizontalAlignment="Right" Margin="10">
+            <TextBlock Text="👤 " FontSize="14" />
+            <TextBlock Text="{Binding ManagerName}" FontWeight="Bold" FontSize="14"/>
+            <TextBlock Text=" (" />
+            <TextBlock Text="{Binding RoleName}" Foreground="DarkGray" />
+            <TextBlock Text=")" />
+        </StackPanel>
+
+        <!-- MENU TRÁI -->
+        <StackPanel DockPanel.Dock="Left" Width="220" Background="#EFEFEF">
+            <TextBlock Text="📋 MENU QUẢN LÝ" FontWeight="Bold" FontSize="16" Margin="10"/>
+            <Button Content="📚 Quản lý khóa học" Command="{Binding ShowTrainingCommand}" Margin="5"/>
+            <Button Content="📢 Chương trình cộng đồng" Command="{Binding ShowCommunityCommand}" Margin="5"/>
+            <Button Content="📝 Khảo sát" Command="{Binding ShowSurveyCommand}" Margin="5"/>
+            <Button Content="👥 Người dùng" Command="{Binding ShowUsersCommand}" Margin="5"/>
+            <Button Content="📊 Dashboard / Báo cáo" Command="{Binding ShowDashboardCommand}" Margin="5"/>
+        </StackPanel>
+
+        <!-- VÙNG HIỂN THỊ NỘI DUNG CÁC MODULE -->
+        <ContentControl Content="{Binding CurrentView}" />
+    </DockPanel>
+</Window>
