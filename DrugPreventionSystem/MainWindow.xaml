@@ -1,12 +1,84 @@
 ﻿<Window x:Class="DrugPreventionSystem.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:DrugPreventionSystem"
-        mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid Margin="10">
-        <DataGrid x:Name="UserDataGrid" AutoGenerateColumns="True" />
-    </Grid>
+        Title="Chọn khóa học" Height="550" Width="850">
+    <DockPanel>
+        <!-- Menu -->
+        <Menu DockPanel.Dock="Top" x:Name="mainMenu" Background="LightGray">
+            <!-- MenuItem sẽ được thêm động trong code-behind qua LoadMenuByRole -->
+        </Menu>
+
+        <!-- Nội dung chính -->
+        <Grid Margin="10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <!-- Welcome -->
+                <RowDefinition Height="Auto"/>
+                <!-- Age filter -->
+                <RowDefinition Height="Auto"/>
+                <!-- Search -->
+                <RowDefinition/>
+                <!-- Course list -->
+            </Grid.RowDefinitions>
+
+            <!-- Welcome Label -->
+            <Label x:Name="lblWelcome"
+                   Content="Chào mừng!"
+                   FontSize="18"
+                   FontWeight="Bold"
+                   Foreground="DarkBlue"
+                   Grid.Row="0"
+                   Margin="0,0,0,10"/>
+
+            <!-- Age Filter -->
+            <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,10">
+                <TextBlock VerticalAlignment="Center" Text="Chọn nhóm độ tuổi: " Margin="0,0,10,0"/>
+                <ComboBox x:Name="cboAgeGroup"
+                          Width="200"
+                          SelectionChanged="cboAgeGroup_SelectionChanged">
+                    <ComboBoxItem Content="Tất cả" IsSelected="True"/>
+                    <ComboBoxItem Content="Học sinh"/>
+                    <ComboBoxItem Content="Sinh viên"/>
+                    <ComboBoxItem Content="Phụ huynh"/>
+                    <ComboBoxItem Content="Giáo viên"/>
+                </ComboBox>
+            </StackPanel>
+
+            <!-- Search -->
+            <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,0,0,10">
+                <Grid>
+                    <TextBox x:Name="txtSearch"
+                             Width="400"
+                             Margin="0,0,10,0"
+                             TextChanged="txtSearch_TextChanged"/>
+                    <TextBlock x:Name="txtPlaceholder"
+                               Text="Tìm kiếm khóa học..."
+                               Foreground="Gray"
+                               Margin="8,2,0,0"
+                               IsHitTestVisible="False"
+                               VerticalAlignment="Top"
+                               HorizontalAlignment="Left"
+                               Visibility="Visible"/>
+                </Grid>
+                <Button Content="Tìm"
+                        Width="80"
+                        Margin="5,0,0,0"
+                        Click="btnSearch_Click"/>
+            </StackPanel>
+
+            <!-- Course List -->
+            <ListBox x:Name="lstCourses"
+         Grid.Row="3"
+         SelectionChanged="lstCourses_SelectionChanged">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Margin="5">
+                            <TextBlock Text="{Binding Title}" FontSize="16" FontWeight="Bold"/>
+                            <TextBlock Text="{Binding Description}" TextWrapping="Wrap"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </Grid>
+    </DockPanel>
 </Window>

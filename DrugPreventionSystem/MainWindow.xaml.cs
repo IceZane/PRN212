@@ -10,30 +10,170 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using DataAccessObject;
 using BusinessObjects;
+using System.Data;
+using System.Windows.Media.Animation;
 namespace DrugPreventionSystem
 {
     public partial class MainWindow : Window
     {
         private DrugUsePreventionSupportSystemContext _context;
 
-        public MainWindow()
+        private string currentRole;
+        private string currentUsername;
+        private TrainingCourseDAO _courseDAO;
+        private User _currentUser;
+        private bool isInitialized = false;
+
+
+        public MainWindow(User user)
         {
             InitializeComponent();
-            LoadUsers();
+
+            _context = new DrugUsePreventionSupportSystemContext();
+            _courseDAO = new TrainingCourseDAO();
+            _currentUser = user;
+
+            currentRole = _currentUser.Role?.RoleName ?? "Member"; 
+            currentUsername = _currentUser.Email ?? "unknown";      
+
+            lblWelcome.Content = _currentUser.Role != null
+                ? $"Chào {_currentUser.FullName} ({_currentUser.Role.RoleName})"
+                : $"Chào {_currentUser.FullName}";
+
+            LoadMenuByRole(currentRole);
+
+            isInitialized = true;
+            LoadCourses();
         }
 
-        private void LoadUsers()
+
+        private void LoadMenuByRole(string role)
         {
-            try
+            mainMenu.Items.Clear();
+
+            MenuItem homeItem = new MenuItem { Header = "Trang chủ", Name = "menuHome" };
+            homeItem.Click += HomeItem_Click;
+            mainMenu.Items.Add(homeItem);
+
+            switch (role)
             {
-                _context = new DrugUsePreventionSupportSystemContext();
-                var users = _context.Users.ToList();
-                UserDataGrid.ItemsSource = users;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Lỗi khi tải dữ liệu người dùng: " + ex.Message);
+                case "Member":
+                    var myCoursesMenu = new MenuItem { Header = "Khóa học của tôi" };
+                    myCoursesMenu.Click += MyCourses_Click;
+                    mainMenu.Items.Add(myCoursesMenu);
+
+                    mainMenu.Items.Add(new MenuItem { Header = "Thông tin cá nhân" });
+                    break;
+
+                case "Staff":
+                    mainMenu.Items.Add(new MenuItem { Header = "Quản lý khóa học" });
+                    mainMenu.Items.Add(new MenuItem { Header = "Xem học viên" });
+                    break;
+
+                case "Manager":
+                    mainMenu.Items.Add(new MenuItem { Header = "Thống kê hệ thống" });
+                    mainMenu.Items.Add(new MenuItem { Header = "Phân quyền" });
+                    break;
+
+                case "Consultant":
+                    mainMenu.Items.Add(new MenuItem { Header = "Tư vấn học viên" });
+                    mainMenu.Items.Add(new MenuItem { Header = "Lịch hẹn" });
+                    break;
+
+                case "Admin":
+                    mainMenu.Items.Add(new MenuItem { Header = "Quản trị hệ thống" });
+                    mainMenu.Items.Add(new MenuItem { Header = "Quản lý người dùng" });
+                    break;
             }
         }
+
+
+        private void txtSearch_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            txtPlaceholder.Visibility = string.IsNullOrEmpty(txtSearch.Text)
+                ? Visibility.Visible
+                : Visibility.Collapsed;
+        }
+
+        private void cboAgeGroup_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (!isInitialized || _courseDAO == null) return;
+            string? selected = (cboAgeGroup.SelectedItem as ComboBoxItem)?.Content?.ToString();
+
+            if (string.IsNullOrEmpty(selected) || selected == "Tất cả")
+            {
+                LoadCourses();
+            }
+            else
+            {
+                var filtered = _courseDAO.FilterByAudience(selected);
+                lstCourses.ItemsSource = filtered;
+            }
+        }
+
+
+        private void btnSearch_Click(object sender, RoutedEventArgs e)
+        {
+            string keyword = txtSearch.Text.Trim();
+            var result = _courseDAO.SearchCourses(keyword);
+            lstCourses.ItemsSource = result;
+        }
+
+        private void lstCourses_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (lstCourses.SelectedItem is TrainingCourse selectedCourse)
+            {
+                CourseDetailWindow detailWindow = new CourseDetailWindow(selectedCourse, _currentUser); // truyền user
+                detailWindow.ShowDialog();
+                lstCourses.SelectedItem = null;
+            }
+        }
+
+        private void HomeItem_Click(object sender, RoutedEventArgs e)
+        {
+            // Nếu user là Member thì quay về MemberHomePage
+            if (_currentUser != null && _currentUser.Role?.RoleName.Equals("Member", StringComparison.OrdinalIgnoreCase) == true)
+            {
+                MemberHomePage memberHome = new MemberHomePage(_currentUser);
+                memberHome.Show();
+                this.Close();
+            }
+            else
+            {
+                MessageBox.Show("Chức năng Trang chủ chưa hỗ trợ cho vai trò này.", "Thông báo");
+            }
+        }
+        private void LoadCourses()
+        {
+            if (_courseDAO == null)
+            {
+                _courseDAO = new TrainingCourseDAO();
+            }
+
+            var courses = _courseDAO.GetAllCourses();
+            lstCourses.ItemsSource = courses;
+        }
+
+
+        private void MyCourses_Click(object sender, RoutedEventArgs e)
+        {
+            // Lấy danh sách các khóa học đã đăng ký
+            var myCourses = _context.UserCourses
+                .Where(uc => uc.UserId == _currentUser.UserId)
+                .Select(uc => uc.Course)
+                .ToList();
+
+            if (myCourses.Count == 0)
+            {
+                MessageBox.Show("Bạn chưa đăng ký khóa học nào.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
+
+            // Hiển thị danh sách trong lstCourses
+            lstCourses.ItemsSource = myCourses;
+            lblWelcome.Content = $"Khóa học của bạn, {_currentUser.FullName}";
+        }
+
+
     }
 }
