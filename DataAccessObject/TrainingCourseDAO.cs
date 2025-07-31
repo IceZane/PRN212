@@ -21,17 +21,12 @@ namespace DataAccessObject
         public List<TrainingCourse> SearchCourses(string keyword)
         {
             return _context.TrainingCourses
-                .Where(c => (c.Title ?? "").Contains(keyword) || (c.Description ?? "").Contains(keyword))
+                .Where(c => c.Title.Contains(keyword) || c.Description.Contains(keyword))
                 .ToList();
         }
 
-        public List<TrainingCourse> FilterByAudience(string? audience)
+        public List<TrainingCourse> FilterByAudience(string audience)
         {
-            if (string.IsNullOrEmpty(audience))
-            {
-                return GetAllCourses(); 
-            }
-
             return _context.TrainingCourses
                 .Where(c => c.TargetAudience == audience)
                 .ToList();

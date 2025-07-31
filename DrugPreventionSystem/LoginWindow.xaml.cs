@@ -33,6 +33,7 @@ namespace DrugPreventionSystem
                     MemberHomePage memberHomePage = new MemberHomePage(user);
                     memberHomePage.Show();
                 }
+<<<<<<< HEAD
                 else if (user.Role.RoleName.Equals("Manager", StringComparison.OrdinalIgnoreCase))
                 {
                     ManagerWindow managerWindow = new ManagerWindow(user); // hoặc truyền user nếu cần
@@ -42,6 +43,12 @@ namespace DrugPreventionSystem
                 {
                     MessageBox.Show("Bạn không có quyền truy cập hệ thống!", "Cảnh báo", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
+=======
+                else
+                {
+                    MainWindow mainWindow = new MainWindow(user);
+                    mainWindow.Show();
+>>>>>>> c41ce914d8f443a3c5b2ad8dce6cbca1419fdc02
                 }
 
                 this.Close(); // Chỉ đóng sau khi mở cửa sổ mới

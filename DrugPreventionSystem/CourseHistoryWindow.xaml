@@ -1,0 +1,20 @@
+﻿<Window x:Class="DrugPreventionSystem.CourseHistoryWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DrugPreventionSystem"
+        mc:Ignorable="d"
+        Title="CourseHistoryWindow" Height="450" Width="800">
+    <StackPanel>
+        <DataGrid x:Name="dg_UserCourses" CanUserAddRows="False" AutoGenerateColumns="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="UserCourseId" Binding="{Binding UserCourseId}" />
+                <DataGridTextColumn Header="UserName" Binding="{Binding User.FullName}" />
+                <DataGridTextColumn Header="CourseName" Binding="{Binding Course.Title}" />
+                <DataGridTextColumn Header="RegisteredAt" Binding="{Binding RegisteredAt}" />
+                <DataGridTextColumn Header="ProgressPercent" Binding="{Binding ProgressPercent}" />
+            </DataGrid.Columns>
+        </DataGrid>
+    </StackPanel>
+</Window>
