@@ -136,7 +136,7 @@ namespace DrugPreventionSystem
         {
             if (_courseDAO == null)
             {
-                MessageBox.Show("_courseDAO chưa được khởi tạo!", "Lỗi nghiêm trọng", MessageBoxButton.OK, MessageBoxImage.Error);
+                
                 return;
             }
 
