@@ -18,13 +18,13 @@ namespace DrugPreventionSystem
 
         private void btnLogin_Click(object sender, RoutedEventArgs e)
         {
-            string username = txtUsername.Text.Trim().ToLower();
+            string email = txtEmail.Text.Trim().ToLower();
             string password = txtPassword.Password.Trim();
 
             // Truy vấn và Include Role
             var user = _context.Users
                 .Include(u => u.Role)
-                .FirstOrDefault(u => u.Email.ToLower() == username && u.PasswordHash == password);
+                .FirstOrDefault(u => u.Email.ToLower() == email && u.PasswordHash == password);
 
             if (user != null && user.Role != null)
             {

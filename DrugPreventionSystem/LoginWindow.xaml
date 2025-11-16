@@ -12,8 +12,8 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <TextBlock Text="Tên đăng nhập:" Grid.Row="0" Margin="0,0,0,5"/>
-        <TextBox x:Name="txtUsername" Grid.Row="1" Height="30"/>
+        <TextBlock Text="Email:" Grid.Row="0" Margin="0,0,0,5"/>
+        <TextBox x:Name="txtEmail" Grid.Row="1" Height="30"/>
 
         <TextBlock Text="Mật khẩu:" Grid.Row="2" Margin="0,10,0,5"/>
         <PasswordBox x:Name="txtPassword" Grid.Row="3" Height="30"/>
