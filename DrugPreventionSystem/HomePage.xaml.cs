@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BusinessObjects;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,10 +20,12 @@ namespace DrugPreventionSystem
     /// </summary>
     public partial class HomePage : Page
     {
-        public HomePage(string username, string role)
+        private User _loginUser;
+
+        public HomePage(User loginUser)
         {
             InitializeComponent();
-            txtGreeting.Text = $"Xin chào, {username} ({role})!";
+            txtGreeting.Text = $"Xin chào,{_loginUser.FullName}!";
         }
     }
 }

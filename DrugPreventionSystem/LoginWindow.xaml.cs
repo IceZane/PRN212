@@ -38,6 +38,16 @@ namespace DrugPreventionSystem
                     ManagerWindow managerWindow = new ManagerWindow(user); // hoặc truyền user nếu cần
                     managerWindow.Show();
                 }
+                else if (user.Role.RoleName.Equals("Admin", StringComparison.OrdinalIgnoreCase))
+                {
+                    ManagerWindow managerWindow = new ManagerWindow(user); // hoặc truyền user nếu cần
+                    managerWindow.Show();
+                }
+                else if (user.Role.RoleName.Equals("Staff", StringComparison.OrdinalIgnoreCase))
+                {
+                    ManagerWindow managerWindow = new ManagerWindow(user); // hoặc truyền user nếu cần
+                    managerWindow.Show();
+                }
                 else
                 {
                     MessageBox.Show("Bạn không có quyền truy cập hệ thống!", "Cảnh báo", MessageBoxButton.OK, MessageBoxImage.Warning);

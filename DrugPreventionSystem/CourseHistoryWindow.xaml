@@ -5,15 +5,15 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DrugPreventionSystem"
         mc:Ignorable="d"
-        Title="CourseHistoryWindow" Height="450" Width="800">
+        Title="CourseHistoryWindow" Height="450" Width="800" WindowStartupLocation="CenterScreen">
     <StackPanel>
         <DataGrid x:Name="dg_UserCourses" CanUserAddRows="False" AutoGenerateColumns="False">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="UserCourseId" Binding="{Binding UserCourseId}" />
-                <DataGridTextColumn Header="UserName" Binding="{Binding User.FullName}" />
-                <DataGridTextColumn Header="CourseName" Binding="{Binding Course.Title}" />
-                <DataGridTextColumn Header="RegisteredAt" Binding="{Binding RegisteredAt}" />
-                <DataGridTextColumn Header="ProgressPercent" Binding="{Binding ProgressPercent}" />
+                <DataGridTextColumn Header="Mã Khóa Học" Binding="{Binding UserCourseId}" />
+                <DataGridTextColumn Header="Tên Người Dùng" Binding="{Binding User.FullName}" />
+                <DataGridTextColumn Header="Tên Khóa Học" Binding="{Binding Course.Title}" />
+                <DataGridTextColumn Header="Thời gian Đăng ký" Binding="{Binding RegisteredAt}" />
+                <DataGridTextColumn Header="Quá Trình Học" Binding="{Binding ProgressPercent}" />
             </DataGrid.Columns>
         </DataGrid>
     </StackPanel>
